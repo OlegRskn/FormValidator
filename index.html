@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Validation</title>
+    <script src="main.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <form
+      action=""
+      name="contact-form"
+      class="form"
+      id="contact-form"
+      style="margin-top: 32px"
+    >
+      <h2
+        style="
+          text-align: center;
+          margin-bottom: 18px;
+          font-weight: 600;
+          color: #4f46e5;
+        "
+      >
+        Связаться с нами
+      </h2>
+      <label for="contact-email">Email</label>
+      <input
+        type="email"
+        class="input"
+        name="contact-email"
+        id="contact-email"
+        placeholder="you@example.com"
+        require
+      />
+      <p id="email-error" class="validation-message"></p>
+
+      <label for="contact-phone">Телефон</label>
+      <input
+        type="tel"
+        class="input"
+        name="contact-phone"
+        id="contact-phone"
+        placeholder="+7 (___) ___-____"
+      />
+      <p id="phone-error" class="validation-message"></p>
+      <label for="contact-file">Загрузить файл (только JPEG)</label>
+      <input
+        type="file"
+        class="input"
+        name="contact-file"
+        id="contact-file"
+        accept="image/jpeg"
+      />
+      <p id="file-error" class="validation-message"></p>
+
+      <div
+        class="navigation"
+        style="justify-content: center; gap: 0; margin-top: 18px"
+      >
+        <button
+          type="submit"
+          class="btn"
+          style="min-width: 160px"
+          id="submit-button"
+        >
+          Отправить
+        </button>
+      </div>
+      <div
+        id="contact-form-message"
+        style="margin-top: 14px; text-align: center; font-size: 1em"
+      ></div>
+    </form>
+  </body>
+</html>
