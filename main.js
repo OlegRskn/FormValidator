@@ -38,8 +38,9 @@ window.addEventListener("load", () => {
   submitBtn.addEventListener("click", (e) => {
     e.preventDefault();
 
-    validator.validate();
-    if (validator.validate()) {
+    const isValid = validator.validate();
+
+    if (isValid) {
       alert("Форма успешно отправлена");
     }
   });
