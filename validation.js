@@ -1,20 +1,25 @@
-class ValidationEngine {
-  static validateEmail(value) {
-    return value !== "" && /\S+@\S+\.\S+/.test(value);
-  }
+const validationRules = {
+  email: (value) =>
+    value
+      ? { valid: /\S+@\S+\.\S+/.test(value), reason: "Некорректный email" }
+      : { valid: false, reason: "Поле не может быть пустым" },
 
-  static validatePhone(value) {
-    return /^\+7\s?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{4}$/.test(value);
-  }
+  phone: (value) =>
+    value
+      ? {
+          valid: /^\+7\s?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{4}$/.test(value),
+          reason: "Телефон в формате +7 (XXX) XXX-XXXX",
+        }
+      : { valid: false, reason: "Поле не может быть пустым" },
 
-  static validateFile(file) {
-    if (!file) return { valid: false, reason: "Файл не выбран" };
-    const ext = file.name.split(".").pop();
+  file: (value) => {
+    if (!value) return { valid: false, reason: "Файл не выбран" };
+    const ext = value.name.split(".").pop().toLowerCase();
     if (!["jpg", "jpeg"].includes(ext))
       return { valid: false, reason: "Файл должен быть jpeg" };
     return { valid: true };
-  }
-}
+  },
+};
 
 class ErrorRenderer {
   static showError(messageElement, containerElement, text) {
@@ -53,27 +58,18 @@ class FormValidator {
   }
 
   validateField(field, value) {
-    if (field.isComplex) {
-      const { valid, reason } = field.validate(value);
-      if (!valid) {
-        ErrorRenderer.showError(field.messageEl, field.containerEl, reason);
-        return false;
-      } else {
-        ErrorRenderer.clearError(field.messageEl, field.containerEl);
-      }
-    } else {
-      if (!field.validate(value)) {
-        ErrorRenderer.showError(
-          field.messageEl,
-          field.containerEl,
-          field.errorMessage
-        );
-        return false;
-      } else {
-        ErrorRenderer.clearError(field.messageEl, field.containerEl);
-        return true;
-      }
+    const rule = validationRules[field.name];
+    if (!rule)
+      throw new Error(`Нет правила валидации для поля "${field.name}"`);
+
+    const { valid, reason } = rule(value);
+    if (!valid) {
+      ErrorRenderer.showError(field.messageEl, field.containerEl, reason);
+      return false;
     }
+
+    ErrorRenderer.clearError(field.messageEl, field.containerEl);
+    return true;
   }
   validate() {
     let isValid = true;
@@ -104,4 +100,4 @@ class FormValidator {
   }
 }
 
-export { ValidationEngine, ErrorRenderer, FormValidator };
+export { validationRules, ErrorRenderer, FormValidator };
